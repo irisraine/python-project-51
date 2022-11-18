@@ -6,3 +6,6 @@ __pycache__
 
 # Ignore all temporary *.pyc files in any project's directiories
 *.pyc
+
+# Ignore log-file
+page_loader.log

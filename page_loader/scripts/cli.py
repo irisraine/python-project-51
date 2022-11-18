@@ -19,8 +19,20 @@ def main():
              "The directory must be present and writable"
     )
     parser.add_argument("url", help="Source url")
+    parser.add_argument(
+        "-g",
+        "--globalassets",
+        action="store_true",
+        help="If activated, page loader will download all assets, not only local ones"
+    )
+    parser.add_argument(
+        "-l",
+        "--log",
+        action="store_true",
+        help="Enable writing log file"
+    )
     args = parser.parse_args()
-    print(download(args.url, args.output))
+    print(download(args.url, args.output, args.globalassets, args.log))
 
 
 if __name__ == '__main__':
