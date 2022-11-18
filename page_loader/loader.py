@@ -36,50 +36,6 @@ def download(url, save_location, is_global_assets=False, is_logfile=False):
     return path_to_saved_page
 
 
-# def download_assets(soup, url, save_location, is_global_assets):
-#     directory_to_save = create_directory(url, save_location)
-#     assets_source = {}
-#
-#     def is_local_asset(asset_url):
-#         return urlsplit(url).netloc == urlsplit(asset_url).netloc
-#
-#     def is_valid_asset(asset_url):
-#         return re.match("(http|https)", asset_url)
-#
-#     elements = get_elements(soup)
-#     for element in elements:
-#         asset_url_orig = element.get(get_attribute(element))
-#         if asset_url_orig:
-#             asset_url_full = urljoin(url, asset_url_orig)
-#             if not is_global_assets and not is_local_asset(asset_url_full):
-#                 logging.warning(f"The resource {asset_url_full} cannot be saved in non-global mode")
-#                 continue
-#             if not is_valid_asset(asset_url_full):
-#                 logging.warning(f"The resource {asset_url_full} has unrecognized format and has been omitted.")
-#                 continue
-#             asset_local = get_asset_name(asset_url_full, directory_to_save)
-#             assets_source.setdefault(asset_url_orig, asset_local)
-#     bar = IncrementalBar('Downloading: ', max=len(assets_source))
-#     for asset_url_raw in assets_source.keys():
-#         asset_url_full = urljoin(url, asset_url_raw)
-#
-#         asset = make_http_request(asset_url_full, is_asset=True)
-#         save_asset(asset_url_full, directory_to_save, asset)
-#
-#         bar.next()
-#     bar.finish()
-#     for element in elements:
-#         attribute = get_attribute(element)
-#         asset_source = element.get(attribute)
-#         if asset_source:
-#             if not is_global_assets and not is_local_asset(asset_source):
-#                 continue
-#             element[attribute] = element[attribute].replace(
-#                 element[attribute],
-#                 assets_source[element[attribute]]
-#             )
-
-
 def get_assets(elements, url, save_location, is_global_assets):
     assets_source = {}
 
