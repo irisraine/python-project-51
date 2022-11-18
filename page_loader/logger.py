@@ -2,7 +2,7 @@ import logging
 import sys
 
 RECORD_FILE_FORMAT = "[%(asctime)s] %(levelname)s: %(message)s"
-RECORD_CLI_FORMAT = "%(levelname)s: %(message)s"
+RECORD_CLI_FORMAT = "%(message)s"
 DATE_FORMAT = "%d-%m-%Y %H:%M:%S"
 
 

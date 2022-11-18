@@ -35,7 +35,7 @@ def main():
     )
     args = parser.parse_args()
     save_location = download(args.url, args.output, args.globalassets, args.log)
-    logging.info(f"Full system path to the saved page: {save_location}")
+    logging.info(f"The requested webpage has been successfully downloaded into {save_location}")
     sys.exit(0)
 
 
