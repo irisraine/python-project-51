@@ -2,6 +2,8 @@
 
 import argparse
 import os
+import sys
+import logging
 from page_loader import download
 
 
@@ -32,7 +34,9 @@ def main():
         help="Enable writing log file"
     )
     args = parser.parse_args()
-    print(download(args.url, args.output, args.globalassets, args.log))
+    save_location = download(args.url, args.output, args.globalassets, args.log)
+    logging.info(f"Full system path to the saved page: {save_location}")
+    sys.exit(0)
 
 
 if __name__ == '__main__':

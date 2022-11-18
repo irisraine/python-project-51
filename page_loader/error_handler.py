@@ -8,19 +8,19 @@ def error_handler(func):
         try:
             result = func(*args, **kwargs)
         except requests.ConnectionError:
-            logging.error("Connection error occurred!")
+            logging.error("Connection error occurred.")
             sys.exit(1)
         except requests.HTTPError:
-            logging.error("Requested web page is unavailable!")
+            logging.error("Requested web resource is unavailable.")
             sys.exit(1)
         except FileNotFoundError:
-            logging.error("Destination directory doesn't exist!")
+            logging.error("Destination directory doesn't exist.")
             sys.exit(1)
         except PermissionError:
-            logging.error("Access violation!")
+            logging.error("Access violation.")
             sys.exit(1)
         except OSError:
-            logging.error("Generic OS Error")
+            logging.error("General file system error.")
             sys.exit(1)
         return result
     return inner
