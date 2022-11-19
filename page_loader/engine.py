@@ -4,13 +4,6 @@ import logging
 import requests
 from urllib.parse import urlsplit
 
-PATH_PATTERN = "[^A-Za-z0-9]"
-ASSET_TYPES = {
-    "img": "src",
-    "link": "href",
-    "script": "src"
-}
-
 
 def make_http_request(url, is_asset=False):
     try:
@@ -52,7 +45,7 @@ def create_directory(url, save_location):
 def get_base_name(url):
     netloc, path, query = urlsplit(url.rstrip("/"))[1:4]
     path = os.path.splitext(path)[0]
-    base_name = re.sub(PATH_PATTERN, "-", f'{netloc}{path}{query}')
+    base_name = re.sub("[^A-Za-z0-9]", "-", f'{netloc}{path}{query}')
     return base_name
 
 
