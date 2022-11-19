@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 import requests
 from urllib.parse import urlsplit
 
@@ -12,13 +13,17 @@ ASSET_TYPES = {
 
 
 def make_http_request(url, is_asset=False):
-    response = requests.get(url)
-    if not response.ok:
+    try:
+        response = requests.get(url)
         response.raise_for_status()
-    if is_asset:
-        return response.content
-    encoding = response.encoding
-    return response.content.decode(encoding)
+        if is_asset:
+            return response.content
+        encoding = response.encoding
+        return response.content.decode(encoding)
+    except requests.RequestException as error:
+        if not is_asset:
+            raise error
+        logging.warning(f"Resource {url} is unavailable")
 
 
 def save_html(url, save_location, content):
@@ -58,4 +63,8 @@ def get_asset_name(url, save_location):
         asset_name = asset_name[:255 - len(extension) - 1]
     return f'{save_location}/{asset_name}{extension}'
 
+
+def check_location(directory):
+    if not os.path.exists(directory):
+        raise FileNotFoundError
 
