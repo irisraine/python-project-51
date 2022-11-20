@@ -13,13 +13,9 @@ def init_logger(is_logfile=False):
         fmt=RECORD_CLI_FORMAT,
         datefmt=DATE_FORMAT
     )
-    info_handler = logging.StreamHandler(sys.stdout)
-    info_handler.setFormatter(cli_record_format)
-    info_handler.addFilter(lambda record: record.levelno == logging.INFO)
     error_handler = logging.StreamHandler(sys.stderr)
     error_handler.setFormatter(cli_record_format)
     error_handler.addFilter(lambda record: record.levelno >= logging.ERROR)
-    logger.addHandler(info_handler)
     logger.addHandler(error_handler)
     if is_logfile:
         file_record_format = logging.Formatter(

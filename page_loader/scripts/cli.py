@@ -3,24 +3,19 @@
 import argparse
 import os
 import sys
-import logging
 from page_loader import download
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Downloads a webpage "
-                    "and places it in the local directory "
-                    "for offline viewing."
+        description="Downloads a webpage and places it in the local directory for offline viewing."  # noqa: E501
     )
     parser.add_argument(
         "-o",
         "--output",
         default=os.getcwd(),
-        help="Path to the destination directory. "
-             "The directory must be present and writable. "
-             "Leave it blank if you want to save the destination page "
-             "into you current working directory"
+        help="Path to the destination directory. The directory must be present and writable. "  # noqa: E501
+             "Leave it blank if you want to save the destination page into you current working directory"  # noqa: E501
     )
     parser.add_argument("url", help="Source url")
     parser.add_argument(
@@ -28,8 +23,7 @@ def main():
         "--globals",
         action="store_true",
         help="If activated, page loader utility will download "
-             "all of requested page's associated resources, "
-             "not only local ones."
+             "all of requested page's associated resources, not only local ones."  # noqa: E501
     )
     parser.add_argument(
         "-l",
@@ -39,8 +33,7 @@ def main():
     )
     args = parser.parse_args()
     save_location = download(args.url, args.output, args.globals, args.log)
-    logging.info(f"The requested webpage has been successfully "
-                 f"downloaded into {save_location}")
+    print(f"The requested webpage has been successfully downloaded into {save_location}")  # noqa: E501
     sys.exit(0)
 
 

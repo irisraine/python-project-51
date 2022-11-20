@@ -11,26 +11,22 @@ def error_handler(func):  # noqa: C901
             logging.error("The request is timed out.")
             sys.exit(1)
         except requests.ConnectionError:
-            logging.error("General connection error occurred. "
-                          "Please check your internet-connection "
-                          "and try again")
+            logging.error("General connection error occurred.")
+            print("Please check your internet-connection and try again")
             sys.exit(1)
         except requests.HTTPError:
             logging.error("Requested web resource is unavailable.")
             sys.exit(1)
         except FileNotFoundError:
-            logging.error("Destination directory doesn't exist. "
-                          "Enter the correct path to save directory, "
-                          "or use the default path")
+            logging.error("Destination directory doesn't exist.")
+            print("Enter the correct path to save directory, or use the default path")  # noqa: E501
             sys.exit(1)
         except NotADirectoryError:
-            logging.error("The destination path doesn't correspond "
-                          "to a directory")
+            logging.error("The destination path doesn't correspond to a directory")  # noqa: E501
             sys.exit(1)
         except PermissionError:
-            logging.error("Access violation. "
-                          "You have no permission to save file "
-                          "in this location")
+            logging.error("Access violation.")
+            print("You have no permission to save file in this location")
             sys.exit(1)
         except OSError:
             logging.critical("General file system error.")

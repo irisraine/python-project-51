@@ -6,41 +6,43 @@ from urllib.parse import urlsplit, urljoin
 from page_loader.error_handler import error_handler
 from page_loader.logger import init_logger
 from page_loader.engine import get_http_request
-from page_loader.engine import save, get_asset_name, create_dir, check_dir
+from page_loader.engine import save, get_asset_name, create_directory, check_directory  # noqa: E501
 
 
 @error_handler
 def download(url, save_location, is_globals=False, is_logfile=False):
     init_logger(is_logfile)
-    check_dir(save_location)
-    logging.info("Session started. Trying to make a connection...")
+    check_directory(save_location)
+    logging.info("Session started.")
+    print("Trying to make a connection...")
     page = get_http_request(url)
     page_parsed = BeautifulSoup(page, 'html.parser')
-    logging.info("Start downloading the requested page "
-                 "and all of its associated resources.")
+    print("Start downloading the requested page and all of its associated resources.")  # noqa: E501
     bar = IncrementalBar('Downloading: ', max=1)
     elements = page_parsed.find_all(['img', 'link', 'script'])
     omitted_assets = 0
     if elements:
-        assets_directory = create_dir(url, save_location)
-        assets_source = get_assets(elements, url, assets_directory, is_globals)
+        assets_directory = create_directory(url, save_location)
+        logging.info(f"Directory {assets_directory} is created")
+        assets_source = get_assets(elements, url, assets_directory, is_globals)  # noqa: E501
         bar.max += len(assets_source)
         for asset_url_raw in assets_source.keys():
             asset_url_full = urljoin(url, asset_url_raw)
             asset = get_http_request(asset_url_full, is_asset=True)
             if asset:
                 save(asset_url_full, assets_directory, asset, is_asset=True)
+                logging.info(f"Associated resource {asset_url_full} has been downloaded.")  # noqa: E501
                 bar.next()
             else:
                 omitted_assets += 1
         replace_links(elements, assets_source)
         page = page_parsed.prettify()
     saved_page_fullname = save(url, save_location, page)
+    logging.info(f"The requested webpage {url} has been successfully downloaded.")  # noqa: E501
     bar.next()
     bar.finish()
     if omitted_assets:
-        logging.info(f"{omitted_assets} resource file(s) "
-                     f"has been omitted due to their unavailability.")
+        print(f"{omitted_assets} resource file(s) has been omitted due to their unavailability.")  # noqa: E501
     return saved_page_fullname
 
 
@@ -50,9 +52,8 @@ def get_assets(elements, url, save_location, is_globals):
         asset_url_orig = element.get(get_attribute(element))
         if asset_url_orig:
             asset_url_full = urljoin(url, asset_url_orig)
-            if not is_globals:
-                if urlsplit(url).netloc != urlsplit(asset_url_full).netloc:
-                    continue
+            if not is_globals and urlsplit(url).netloc != urlsplit(asset_url_full).netloc:  # noqa: E501
+                continue
             if not re.match("(http|https)", asset_url_full):
                 continue
             asset_local = get_asset_name(asset_url_full, save_location)

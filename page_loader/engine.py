@@ -30,14 +30,14 @@ def save(url, save_location, content, is_asset=False):
     return absolute_filename
 
 
-def create_dir(url, save_location):
+def create_directory(url, save_location):
     directory = os.path.join(save_location, f'{get_base_name(url)}_files')
     if not os.path.exists(directory):
         os.mkdir(directory)
     return directory
 
 
-def check_dir(directory):
+def check_directory(directory):
     if not os.path.exists(directory):
         raise FileNotFoundError
     if not os.path.isdir(directory):
