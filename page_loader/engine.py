@@ -5,7 +5,7 @@ import requests
 from urllib.parse import urlsplit
 
 
-def make_http_request(url, is_asset=False):
+def get_http_request(url, is_asset=False):
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -16,30 +16,32 @@ def make_http_request(url, is_asset=False):
     except requests.RequestException as error:
         if not is_asset:
             raise error
-        logging.warning(f"Resource {url} is unavailable")
+        logging.warning(f"Associated resource {url} is unavailable.")
 
 
-def save_html(url, save_location, content):
+def save(url, save_location, content, is_asset=False):
     filename = f'{get_base_name(url)}.html'
+    if is_asset:
+        filename = get_asset_name(url, save_location)
+    mode = 'w' if not is_asset else 'wb'
     absolute_filename = os.path.join(save_location, filename)
-    with open(absolute_filename, 'w') as current_file:
+    with open(absolute_filename, mode) as current_file:
         current_file.write(content)
     return absolute_filename
 
 
-def save_asset(url, save_location, content):
-    filename = get_asset_name(url, save_location)
-    absolute_filename = os.path.join(save_location, filename)
-    with open(absolute_filename, 'wb') as current_file:
-        current_file.write(content)
-    return absolute_filename
-
-
-def create_directory(url, save_location):
+def create_dir(url, save_location):
     directory = os.path.join(save_location, f'{get_base_name(url)}_files')
     if not os.path.exists(directory):
         os.mkdir(directory)
     return directory
+
+
+def check_dir(directory):
+    if not os.path.exists(directory):
+        raise FileNotFoundError
+    if not os.path.isdir(directory):
+        raise NotADirectoryError
 
 
 def get_base_name(url):
@@ -55,9 +57,3 @@ def get_asset_name(url, save_location):
     if len(asset_name) + len(extension) > 255:
         asset_name = asset_name[:255 - len(extension) - 1]
     return f'{save_location}/{asset_name}{extension}'
-
-
-def check_location(directory):
-    if not os.path.exists(directory):
-        raise FileNotFoundError
-

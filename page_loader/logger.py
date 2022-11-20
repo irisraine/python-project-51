@@ -29,4 +29,3 @@ def init_logger(is_logfile=False):
         file_handler = logging.FileHandler(filename="page_loader.log")
         file_handler.setFormatter(file_record_format)
         logger.addHandler(file_handler)
-
