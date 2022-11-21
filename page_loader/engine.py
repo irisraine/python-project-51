@@ -22,7 +22,7 @@ def get_http_request(url, is_asset=False):
 def save(url, save_location, content, is_asset=False):
     filename = f'{get_base_name(url)}.html'
     if is_asset:
-        filename = get_asset_name(url, save_location)
+        filename = get_asset_name(url)
     mode = 'w' if not is_asset else 'wb'
     absolute_filename = os.path.join(save_location, filename)
     with open(absolute_filename, mode) as current_file:
@@ -51,9 +51,13 @@ def get_base_name(url):
     return base_name
 
 
-def get_asset_name(url, save_location):
+def get_directory_name(url):
+    return f'{get_base_name(url)}_files'
+
+
+def get_asset_name(url):
     asset_name = get_base_name(url)
     extension = os.path.splitext(urlsplit(url).path)[-1]
     if len(asset_name) + len(extension) > 255:
         asset_name = asset_name[:255 - len(extension) - 1]
-    return f'{save_location}/{asset_name}{extension}'
+    return f'{asset_name}{extension}'

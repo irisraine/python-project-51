@@ -19,10 +19,12 @@ def error_handler(func):  # noqa: C901
             sys.exit(1)
         except FileNotFoundError:
             logging.error("Destination directory doesn't exist.")
-            print("Enter the correct path to save directory, or use the default path")  # noqa: E501
+            print("Enter the correct path to save directory, "
+                  "or use the default path")
             sys.exit(1)
         except NotADirectoryError:
-            logging.error("The destination path doesn't correspond to a directory")  # noqa: E501
+            logging.error("The destination path "
+                          "doesn't correspond to a directory")
             sys.exit(1)
         except PermissionError:
             logging.error("Access violation.")

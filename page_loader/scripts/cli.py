@@ -8,14 +8,18 @@ from page_loader import download
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Downloads a webpage and places it in the local directory for offline viewing."  # noqa: E501
+        description="Downloads a webpage "
+                    "and places it in the local directory "
+                    "for offline viewing."
     )
     parser.add_argument(
         "-o",
         "--output",
         default=os.getcwd(),
-        help="Path to the destination directory. The directory must be present and writable. "  # noqa: E501
-             "Leave it blank if you want to save the destination page into you current working directory"  # noqa: E501
+        help="Path to the destination directory. "
+             "The directory must be present and writable. "
+             "Leave it blank if you want to save the destination page "
+             "into you current working directory"
     )
     parser.add_argument("url", help="Source url")
     parser.add_argument(
@@ -23,7 +27,8 @@ def main():
         "--globals",
         action="store_true",
         help="If activated, page loader utility will download "
-             "all of requested page's associated resources, not only local ones."  # noqa: E501
+             "all of requested page's associated resources, "
+             "not only local ones."
     )
     parser.add_argument(
         "-l",
@@ -33,7 +38,8 @@ def main():
     )
     args = parser.parse_args()
     save_location = download(args.url, args.output, args.globals, args.log)
-    print(f"The requested webpage has been successfully downloaded into {save_location}")  # noqa: E501
+    print(f"The requested webpage has been successfully downloaded "
+          f"into {save_location}")
     sys.exit(0)
 
 
