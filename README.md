@@ -25,4 +25,4 @@ Use `-l` or `--log` to enable logging.
 ### Demonstration
 
 *Downloading a web-page using default settings: *
-[![asciicast](https://asciinema.org/a/539866)](https://asciinema.org/a/539866)
+[![asciicast](https://asciinema.org/a/539866.svg)](https://asciinema.org/a/539866)
