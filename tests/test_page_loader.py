@@ -28,7 +28,7 @@ test_assets = [
 
 
 def get_fixture_path(local_filename):
-    return os.path.join('fixtures', local_filename)
+    return os.path.join('tests/fixtures', local_filename)
 
 
 def get_mocked_path(save_location, local_filename):
