@@ -22,6 +22,6 @@ def init_logger(is_logfile=False):
             fmt=RECORD_FILE_FORMAT,
             datefmt=DATE_FORMAT
         )
-        file_handler = logging.FileHandler(filename="page_loader.log")
+        file_handler = logging.FileHandler(filename=".page_loader.log")
         file_handler.setFormatter(file_record_format)
         logger.addHandler(file_handler)
