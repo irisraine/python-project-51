@@ -3,6 +3,11 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/irisraine/python-project-51/workflows/hexlet-check/badge.svg)](https://github.com/irisraine/python-project-51/actions)
 
+[![Actions Status](https://github.com/irisraine/python-project-51/workflows/pytest/badge.svg)](https://github.com/irisraine/python-project-51/actions/workflows/pytest.yml)
+[![Actions Status](https://github.com/irisraine/python-project-51/workflows/flake8/badge.svg)](https://github.com/irisraine/python-project-51/actions/workflows/flake8.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/29b9cc7df151bf8cd176/maintainability)](https://codeclimate.com/github/irisraine/python-project-51/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/29b9cc7df151bf8cd176/test_coverage)](https://codeclimate.com/github/irisraine/python-project-51/test_coverage)
+
 ### Description
 
 Educational project. The command line utility that provides the ability to save web pages on a local computer 
@@ -22,7 +27,9 @@ By default, without specifying a save directory, the page will be saved to the c
 Use optional key `-g` or `--globals` for saving all of page's resources, not only local ones.
 Use `-l` or `--log` to enable logging.
 
+If you need a help, use command `page-loader -h`
+
 ### Demonstration
 
-*Downloading a web-page using default settings: *
+*Downloading a web-page using default settings:*
 [![asciicast](https://asciinema.org/a/539866.svg)](https://asciinema.org/a/539866)
