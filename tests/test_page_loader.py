@@ -78,8 +78,8 @@ def test_download(requests_mock):
 
         assert page_mocked_content == page_expected_content
         assert test_page['expected_assets_directory'] in os.listdir(tempdir)
-        assert assets_stub_listdir == assets_mocked_listdir
-        assert assets_stub_hash == assets_mocked_hash
+        assert assets_mocked_listdir == assets_stub_listdir
+        assert assets_mocked_hash == assets_stub_hash
 
 
 def test_io_errors(requests_mock):
