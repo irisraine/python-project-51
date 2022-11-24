@@ -4,8 +4,9 @@ from bs4 import BeautifulSoup
 from progress.bar import IncrementalBar
 from urllib.parse import urlsplit, urljoin
 from page_loader.logger import init_logger
-from page_loader.engine import get_http_request
-from page_loader.engine import save, get_asset_name, get_base_name, create_directory, check_directory  # noqa: E501
+from page_loader.network import get_http_request
+from page_loader.io_engine import save_data, create_directory, check_directory
+from page_loader.name_assigner import get_base_name, get_asset_name
 
 
 def download(url, save_location, is_globals=False, is_logfile=False):
@@ -25,11 +26,11 @@ def download(url, save_location, is_globals=False, is_logfile=False):
         logging.info(f"Directory {assets_directory} is created")
         assets_source = get_assets(elements, url, is_globals)
         bar.max += len(assets_source)
-        for asset_url_raw, asset_local_name in assets_source.items():
-            asset_url_full = urljoin(url, asset_url_raw)
+        for asset_url_orig, asset_local_name in assets_source.items():
+            asset_url_full = urljoin(url, asset_url_orig)
             asset = get_http_request(asset_url_full, is_asset=True)
             if asset:
-                save(asset_local_name, save_location, asset, is_asset=True)
+                save_data(asset_local_name, save_location, asset)
                 logging.info(f"Associated resource {asset_url_full} "
                              f"has been downloaded.")
                 bar.next()
@@ -38,7 +39,7 @@ def download(url, save_location, is_globals=False, is_logfile=False):
         replace_links(elements, assets_source)
         page = page_parsed.prettify()
     page_local_name = f'{get_base_name(url)}.html'
-    saved_page_fullname = save(page_local_name, save_location, page)
+    saved_page_fullname = save_data(page_local_name, save_location, page)
     logging.info(f"The requested webpage {url} "
                  f"has been successfully downloaded.")
     bar.next()
@@ -52,15 +53,18 @@ def download(url, save_location, is_globals=False, is_logfile=False):
 def get_assets(elements, url, is_globals):
     assets_source = {}
     for element in elements:
-        asset_url_orig = element.get(get_attribute(element))
+        attribute = get_attribute(element)
+        asset_url_orig = element.get(attribute)
         if asset_url_orig:
             asset_url_full = urljoin(url, asset_url_orig)
-            if not is_globals and urlsplit(url).netloc != urlsplit(asset_url_full).netloc:  # noqa: E501
-                continue
+            if not is_globals:
+                if urlsplit(url).netloc != urlsplit(asset_url_full).netloc:
+                    continue
             if not re.match("(http|https)", asset_url_full):
                 continue
-            is_link = (get_attribute(element) == "href")
-            asset_local_name = f'{get_base_name(url)}_files/{get_asset_name(asset_url_full, is_link)}'  # noqa: E501
+            is_link = (attribute == "href")
+            asset_filename = get_asset_name(asset_url_full, is_link)
+            asset_local_name = f'{get_base_name(url)}_files/{asset_filename}'
             assets_source.setdefault(asset_url_orig, asset_local_name)
     return assets_source
 
