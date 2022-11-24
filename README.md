@@ -30,5 +30,13 @@ If you need a help, use command `page-loader -h`
 
 ### Demonstration
 
-*Downloading a web-page using default settings:*
+*Downloading a web-page into a current working directory using default settings:*
 [![asciicast](https://asciinema.org/a/539866.svg)](https://asciinema.org/a/539866)
+
+
+*Downloading a web-page into a specified location:*
+[![asciicast](https://asciinema.org/a/540086.svg)](https://asciinema.org/a/540086)
+
+
+*Getting an errors:*
+[![asciicast](https://asciinema.org/a/540092.svg)](https://asciinema.org/a/540092)
