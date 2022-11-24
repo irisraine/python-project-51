@@ -46,7 +46,7 @@ def open_file(filename, is_asset=False):
 
 
 def test_download(requests_mock):
-    with tempfile.TemporaryDirectory() as temp_dl_dir:
+    with tempfile.TemporaryDirectory() as tempdir:
         page_stub = get_fixture_path(test_page['local'])
         page_expected = get_fixture_path(test_page['result'])
         assets_stub_hash = set()
@@ -63,21 +63,21 @@ def test_download(requests_mock):
             requests_mock.get(test_asset['url'], content=asset_stub_content)
             asset_stub_hash = get_hash(asset_stub_content)
             assets_stub_hash.add(asset_stub_hash)
-        page_mocked = download(test_page['url'], temp_dl_dir)
+
+        page_mocked = download(test_page['url'], tempdir)
         page_mocked_content = open_file(page_mocked)
         page_expected_content = open_file(page_expected)
 
-        assets_mocked_dir = get_mocked_path(temp_dl_dir, test_page['expected_assets_directory'])
+        assets_mocked_dir = get_mocked_path(tempdir, test_page['expected_assets_directory'])
         assets_mocked_listdir = set(os.listdir(assets_mocked_dir))
         for asset_mocked in assets_mocked_listdir:
             asset_mocked = get_mocked_path(assets_mocked_dir, asset_mocked)
-
             asset_mocked_content = open_file(asset_mocked, is_asset=True)
             asset_mocked_hash = get_hash(asset_mocked_content)
             assets_mocked_hash.add(asset_mocked_hash)
 
         assert page_mocked_content == page_expected_content
-        assert test_page['expected_assets_directory'] in os.listdir(temp_dl_dir)
+        assert test_page['expected_assets_directory'] in os.listdir(tempdir)
         assert assets_stub_listdir == assets_mocked_listdir
         assert assets_stub_hash == assets_mocked_hash
 
@@ -106,15 +106,15 @@ def test_network_errors(requests_mock):
 
     with pytest.raises(requests.HTTPError):
         requests_mock.get(test_page['url'], text=page_stub_content, status_code=404)
-        with tempfile.TemporaryDirectory() as temp_dl_dir:
-            download(test_page['url'], temp_dl_dir)
+        with tempfile.TemporaryDirectory() as tempdir:
+            download(test_page['url'], tempdir)
 
     with pytest.raises(requests.Timeout):
         requests_mock.get(test_page['url'], exc=requests.Timeout)
-        with tempfile.TemporaryDirectory() as temp_dl_dir:
-            download(test_page['url'], temp_dl_dir)
+        with tempfile.TemporaryDirectory() as tempdir:
+            download(test_page['url'], tempdir)
 
     with pytest.raises(requests.ConnectionError):
         requests_mock.get(test_page['url'], exc=requests.ConnectionError)
-        with tempfile.TemporaryDirectory() as temp_dl_dir:
-            download(test_page['url'], temp_dl_dir)
+        with tempfile.TemporaryDirectory() as tempdir:
+            download(test_page['url'], tempdir)
