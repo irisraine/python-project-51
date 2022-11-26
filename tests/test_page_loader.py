@@ -64,7 +64,7 @@ def test_download(requests_mock):
             asset_stub_hash = get_hash(asset_stub_content)
             assets_stub_hash.add(asset_stub_hash)
 
-        page_mocked = download(test_page['url'], tempdir)
+        page_mocked = download(test_page['url'], tempdir, is_logfile=True)
         page_mocked_content = open_file(page_mocked)
         page_expected_content = open_file(page_expected)
 
@@ -88,16 +88,16 @@ def test_io_errors(requests_mock):
     requests_mock.get(test_page['url'], text=page_stub_content)
 
     with pytest.raises(FileNotFoundError):
-        download(test_page['url'], '/not_exist_dir')
+        download(test_page['url'], '/not_exist_dir', is_logfile=True)
 
     with pytest.raises(PermissionError):
         with tempfile.TemporaryDirectory() as temp_dl_dir:
             os.chmod(temp_dl_dir, 400)
-            download(test_page['url'], temp_dl_dir)
+            download(test_page['url'], temp_dl_dir, is_logfile=True)
 
     with pytest.raises(NotADirectoryError):
         with tempfile.NamedTemporaryFile() as temp_file:
-            download(test_page['url'], temp_file.name)
+            download(test_page['url'], temp_file.name, is_logfile=True)
 
 
 def test_network_errors(requests_mock):
@@ -107,14 +107,14 @@ def test_network_errors(requests_mock):
     with pytest.raises(requests.HTTPError):
         requests_mock.get(test_page['url'], text=page_stub_content, status_code=404)
         with tempfile.TemporaryDirectory() as tempdir:
-            download(test_page['url'], tempdir)
+            download(test_page['url'], tempdir, is_logfile=True)
 
     with pytest.raises(requests.Timeout):
         requests_mock.get(test_page['url'], exc=requests.Timeout)
         with tempfile.TemporaryDirectory() as tempdir:
-            download(test_page['url'], tempdir)
+            download(test_page['url'], tempdir, is_logfile=True)
 
     with pytest.raises(requests.ConnectionError):
         requests_mock.get(test_page['url'], exc=requests.ConnectionError)
         with tempfile.TemporaryDirectory() as tempdir:
-            download(test_page['url'], tempdir)
+            download(test_page['url'], tempdir, is_logfile=True)
